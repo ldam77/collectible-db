@@ -35,9 +35,20 @@ namespace Inventory.Controllers
     public ActionResult Search(string newItemId, string newItemName)
     {
       List<Collectible> foundList = new List<Collectible> {};
-      int searchId = int.Parse(newItemId);
-      Collectible foundCollectible = Collectible.Find(searchId);
-      foundList.Add(foundCollectible);
+      if(!string.IsNullOrWhiteSpace(Request.Form["newItemName"]))
+      {
+        foundList = Collectible.Find(newItemName);
+      }
+      else if(!string.IsNullOrWhiteSpace(Request.Form["newItemId"]) && int.Parse(newItemId)>0)
+      {
+        int searchId = int.Parse(newItemId);
+        Collectible foundCollectible = Collectible.Find(searchId);
+        foundList.Add(foundCollectible);
+      }
+      else
+      {
+        return View("Find");
+      }
       return View("SearchResult", foundList);
     }
   }

@@ -120,6 +120,33 @@ namespace Inventory.Models
       }
       return foundCollectible;
     }
+    public static List<Collectible> Find(string name)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM collectible WHERE item=@SearchName;";
+      MySqlParameter searchName = new MySqlParameter();
+      searchName.ParameterName = "@SearchName";
+      searchName.Value = name;
+      cmd.Parameters.Add(searchName);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      List<Collectible> foundList = new List<Collectible> {};
+      while(rdr.Read())
+      {
+        int itemId = rdr.GetInt32(0);
+        string itemName = rdr.GetString(1);
+        string itemDescription = rdr.GetString(2);
+        Collectible foundCollectible = new Collectible(itemName, itemDescription, itemId);
+        foundList.Add(foundCollectible);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundList;
+    }
     public static void DeleteAll()
     {
      MySqlConnection conn = DB.Connection();
