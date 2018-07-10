@@ -36,5 +36,19 @@ namespace Inventory.Tests
       // Assert
       Assert.AreEqual(firstCollectible, secondCollectible);
     }
+    [TestMethod]
+    public void Save_SavesToDatabase_ItemList()
+    {
+      //Arrange
+      Collectible testCollectible = new Collectible("testOne","One description");
+
+      //Act
+      testCollectible.Save();
+      List<Collectible> result = Collectible.GetAll();
+      List<Collectible> testList = new List<Collectible>{testCollectible};
+      Console.WriteLine(result[0].GetId());
+      //Assert
+      CollectionAssert.AreEqual(testList, result);
+    }
   }
 }
