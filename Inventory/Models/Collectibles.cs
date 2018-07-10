@@ -84,12 +84,41 @@ namespace Inventory.Models
       cmd.Parameters.Add(item);
       cmd.Parameters.Add(description);
       cmd.ExecuteNonQuery();
+      Id = (int) cmd.LastInsertedId;
 
       conn.Close();
       if (conn !=null)
       {
         conn.Dispose();
       }
+    }
+    public static Collectible Find(int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM collectible WHERE id=@SearchId;";
+      MySqlParameter searchId = new MySqlParameter();
+      searchId.ParameterName = "@SearchId";
+      searchId.Value = id;
+      cmd.Parameters.Add(searchId);
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      string itemName = "";
+      string itemDescription = "";
+      int itemId = 0;
+      while(rdr.Read())
+      {
+        itemId = rdr.GetInt32(0);
+        itemName = rdr.GetString(1);
+        itemDescription = rdr.GetString(2);
+      }
+      Collectible foundCollectible = new Collectible(itemName, itemDescription, itemId);
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return foundCollectible;
     }
     public static void DeleteAll()
     {
