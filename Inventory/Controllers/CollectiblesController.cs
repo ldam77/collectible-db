@@ -32,18 +32,21 @@ namespace Inventory.Controllers
       return View();
     }
     [HttpPost("/collectibles/search")]
-    public ActionResult Search(string newItemId, string newItemName)
+    public ActionResult Search(string searchMethod, string searchTerm)
     {
       List<Collectible> foundList = new List<Collectible> {};
-      if(!string.IsNullOrWhiteSpace(Request.Form["newItemName"]))
+      if(!string.IsNullOrWhiteSpace(Request.Form["searchTerm"]))
       {
-        foundList = Collectible.Find(newItemName);
-      }
-      else if(!string.IsNullOrWhiteSpace(Request.Form["newItemId"]) && int.Parse(newItemId)>0)
-      {
-        int searchId = int.Parse(newItemId);
-        Collectible foundCollectible = Collectible.Find(searchId);
-        foundList.Add(foundCollectible);
+        if(searchMethod.Equals("id"))
+        {
+          int searchId = int.Parse(searchTerm);
+          Collectible foundCollectible = Collectible.Find(searchId);
+          foundList.Add(foundCollectible);
+        }
+        else
+        {
+          foundList = Collectible.Find(searchTerm);
+        }
       }
       else
       {

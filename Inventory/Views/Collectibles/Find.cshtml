@@ -1,10 +1,23 @@
 <h1>Search Collections</h1>
 <form action="/collectibles/search" method="post">
-  <label for="newItemId">Item #</label>
-  <input type="number" name="newItemId">
-  <h3>OR</h3>
-  <label for="newItemName">Item Name</label>
-  <input type="text" name="newItemName">
+  <div class="radio">
+    <div>
+      <label>
+        <input type="radio" name="searchMethod" value="id" checked>
+        Search by ID#
+      </label>
+    </div>
+   <div>
+     <label>
+       <input type="radio" name="searchMethod" value="name">
+       Search by Name
+     </label>
+   </div>
+   <div>
+     <label for="searchTerm">Item Name</label>
+     <input type="text" name="searchTerm">
+   </div>
+  
   <button type="submit">SEARCH</button>
 </form>
 <h3><a href="/">Home</a></h3>
